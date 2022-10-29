@@ -24,6 +24,7 @@ async function run(){
         // console.log('database connected')
         const productsCollection=client.db('mui').collection('products')
         const usersCollection=client.db('mui').collection('users')
+        const paymentCollection=client.db('mui').collection('payments')
 
         // Get/Read all prtoducts..
         app.get('/products',async(req,res)=>{
@@ -66,7 +67,7 @@ async function run(){
             res.send(totalUsers)
         })
 
-        // payment.....
+        // payment method.....
         app.post('/create-payment-intent',async(req,res)=>{
             // const{price}=req.body
 
@@ -79,6 +80,21 @@ async function run(){
                 payment_method_types:['card']
             });
             res.send({clientSecret: paymentIntent.client_secret,})
+        })
+
+        // PATCH for payment (transactionID ) store to (database)..
+        app.patch('/payment-transactionId/:id',async(req,res)=>{
+            const id=req.params.id
+            const payment=req.body;
+            // const filter={_id:ObjectId(id)}
+            // const options = { upsert: true };
+            // const updateDoc = {
+            //     $set: {
+            //         transactionId:payment.transactionId
+            //     }
+            // };
+            const result=await paymentCollection.insertOne(payment);
+            res.send(result)
         })
 
     }
