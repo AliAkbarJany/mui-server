@@ -34,6 +34,15 @@ async function run(){
             res.send(products)
         })
 
+        // Add/Post a Product.....
+        app.post('/products',async (req,res)=>{
+            // console.log('SERVER ',req.body)
+            const newDevice=req.body
+            console.log('body',newDevice)
+            const result=await productsCollection.insertOne(newDevice)
+            res.send(result)
+        })
+
         // Get/Read (single product) for payment....
         app.get('/productForPayment/:paymentId',async(req,res)=>{
             const paymentId=req.params.paymentId
